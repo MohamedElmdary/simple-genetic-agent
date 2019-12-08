@@ -87,13 +87,6 @@ class Ball {
         this.movesCounter = 0;
     }
 
-    clone(ball) {
-        this.moves = ball.moves.slice();
-        this.fitness = ball.fitness;
-        this.movesCounter = 0;
-        this.stuck = false;
-    }
-
     up() {
         this.y -= Ball.moveBy;
     }
@@ -264,27 +257,21 @@ class Agent {
             this.fitness = parentA.fitness;
             this.balls.push(child);
             this.balls.forEach(ball => {
-                if (ball.stuck) {
-                    console.log("before", ball);
-                    ball.clone(parentA);
-                    console.log("after", ball);
-
-                    ball.stuck = false;
-                }
+                ball.stuck = false;
                 ball.movesCounter = 0;
                 ball.x = ballX;
                 ball.y = ballY;
             });
-            // this.balls.forEach(ball => {
-            //     ball.moves = ball.moves.map(move => {
-            //         if (Math.random() < mutate) {
-            //             return Ball.directions[
-            //                 Math.floor(Math.random() * (Ball.directions - 1))
-            //             ];
-            //         }
-            //         return move;
-            //     });
-            // });
+            this.balls.forEach(ball => {
+                ball.moves = ball.moves.map(move => {
+                    if (Math.random() < mutate) {
+                        return Ball.directions[
+                            Math.floor(Math.random() * (Ball.directions - 1))
+                        ];
+                    }
+                    return move;
+                });
+            });
             this.generation++;
         }
 
